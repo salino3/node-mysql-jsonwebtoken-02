@@ -2,11 +2,13 @@ const { db } = require("../../db");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
-const register = (req, res) => {
+const register = async (req, res) => {
   const { name, surname, email, password, passwordConfirm, age } = req.body;
 
-  db.promise()
+  await db
+    .promise()
     .query("SELECT email FROM users WHERE email = (?)", [email])
     .then((result) => {
       if (result[0].length > 0) {
@@ -45,4 +47,51 @@ const register = (req, res) => {
     });
 };
 
-module.exports = { register };
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  db.promise()
+    .query("SELECT * FROM users WHERE email = (?)", [email])
+    .then((result) => {
+      if (result[0].length === 0) {
+        return result.status(404).send("Email not found");
+      }
+
+      const user = result[0][0];
+      const isPasswordValid = bcrypt.compareSync(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).send("Invalid password");
+      }
+
+      // Generate token
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      const generateRandomNumber = () => {
+        return Math.floor(1000 + Math.random() * 9000);
+      };
+
+      res.cookie("auth_token_" + generateRandomNumber(), token, {
+        httpOnly: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+        expires: new Date(Date.now() + 3600 * 1000),
+      });
+
+      return res.json({
+        message: "Login successful",
+        token,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      return res.send("Error during login");
+    });
+};
+
+module.exports = { register, login };
