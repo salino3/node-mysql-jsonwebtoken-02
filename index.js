@@ -11,8 +11,8 @@ app.use(express.json());
 
 const port = process.env.PORT || 5000;
 
-app.use("/api", routerAuth);
-app.use("/api", routerUsers);
+app.use("/auth", routerAuth);
+app.use("/users", routerUsers);
 
 db.connect((err) => {
   if (err) {
