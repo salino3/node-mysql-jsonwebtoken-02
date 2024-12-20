@@ -1,7 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const path = require("path");
-const { db } = require("./db");
+const cors = require("cors");
 const routerUsers = require("./src/routes/users");
 const routerAuth = require("./src/routes/auth");
 
@@ -11,16 +10,26 @@ app.use(express.json());
 
 const port = process.env.PORT || 5000;
 
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONT_END_PORT
+        : "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
 
-db.connect((err) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log("Connected to the MySQL database!");
-  }
-});
+if (process.env.NODE_ENV === "production") {
+  console.log("Running in production mode");
+} else if (process.env.NODE_ENV === "development") {
+  console.log("Running in development mode");
+} else {
+  console.log("Unknown environment");
+}
 
 app.listen(port, () => {
   console.log("Server is running on port " + port);
