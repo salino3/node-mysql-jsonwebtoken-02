@@ -42,7 +42,7 @@ const register = async (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.send("Error checking email");
+      return res.status(500).send("Error checking email");
     });
 };
 
@@ -89,7 +89,7 @@ const login = async (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.send("Error during login");
+      return res.status(500).send("Error during login");
     });
 };
 
