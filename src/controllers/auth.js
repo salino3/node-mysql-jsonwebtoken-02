@@ -1,5 +1,4 @@
 const { db } = require("../../db");
-const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
@@ -43,7 +42,7 @@ const register = async (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.send("Error checking email");
+      return res.status(500).send("Error checking email");
     });
 };
 
@@ -90,7 +89,7 @@ const login = async (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.send("Error during login");
+      return res.status(500).send("Error during login");
     });
 };
 
