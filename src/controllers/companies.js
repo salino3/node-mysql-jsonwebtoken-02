@@ -173,7 +173,7 @@ const deleteCompany = async (req, res) => {
   const dbName = process.env.DB_NAME;
   const companyId = req.params.id;
   try {
-    const result = await db
+    const [result] = await db
       .promise()
       .query(`DELETE FROM \`${dbName}\`.companies WHERE id = (?)`, [companyId]);
     if (result.affectedRows > 0) {
