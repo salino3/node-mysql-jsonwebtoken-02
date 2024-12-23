@@ -8,4 +8,14 @@ routerWorkRelationships.post(
   workRelationshipsController.pendingRelationship
 );
 
+// routerWorkRelationships.delete(
+//   "/left",
+//   workRelationshipsController.leftRelationship
+// );
+
+// routerWorkRelationships.post(
+//   "/active/:id",
+//   workRelationshipsController.activeRelationship
+// );
+
 module.exports = routerWorkRelationships;
