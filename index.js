@@ -1,8 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const routerUsers = require("./src/routes/users");
 const routerAuth = require("./src/routes/auth");
+const routerUsers = require("./src/routes/users");
+const routerCompanies = require("./src/routes/companies");
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use(
 
 app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
+app.use("/companies", routerCompanies);
 
 if (process.env.NODE_ENV === "production") {
   console.log("Running in production mode");
