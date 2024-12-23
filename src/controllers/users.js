@@ -54,24 +54,6 @@ const getUserByEmail = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
-  const dbName = process.env.DB_NAME;
-  const userId = req.params.id;
-  try {
-    const result = await db
-      .promise()
-      .query(`DELETE FROM \`${dbName}\`.users WHERE id = (?)`, [userId]);
-    if (result.affectedRows > 0) {
-      return res.status(200).send("User deleted successfully.");
-    } else {
-      return res.status(404).send("User not found.");
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send(error);
-  }
-};
-
 const updateUser = async (req, res) => {
   const dbName = process.env.DB_NAME;
   const userId = req.params.id;
@@ -183,6 +165,24 @@ const changePasswordUser = async (req, res) => {
       return res.status(404).send({ message: "User not found." });
     }
   } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const dbName = process.env.DB_NAME;
+  const userId = req.params.id;
+  try {
+    const result = await db
+      .promise()
+      .query(`DELETE FROM \`${dbName}\`.users WHERE id = (?)`, [userId]);
+    if (result.affectedRows > 0) {
+      return res.status(200).send("User deleted successfully.");
+    } else {
+      return res.status(404).send("User not found.");
+    }
+  } catch (error) {
+    console.error(error);
     return res.status(500).send(error);
   }
 };
