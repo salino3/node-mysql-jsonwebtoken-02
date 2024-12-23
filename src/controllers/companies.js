@@ -60,25 +60,37 @@ const updateCompany = async (req, res) => {
   const { name, industry, email, head_quarters } = req.body;
 
   try {
+    const [existingCompany] = await db
+      .promise()
+      .query(`SELECT * FROM \`${dbName}\`.companies WHERE email = ?`, [email]);
+
+    if (
+      existingCompany[0] &&
+      existingCompany[0]?.email === email &&
+      companyId != existingCompany[0].id
+    ) {
+      return res.status(400).send({ message: "Email is already in use." });
+    }
+
     const fieldsToUpdate = [];
     const valuesToUpdate = [];
 
-    if (name !== undefined) {
+    if (name && name !== existingCompany[0]?.name) {
       fieldsToUpdate.push("name = ?");
       valuesToUpdate.push(name);
     }
 
-    if (industry !== undefined) {
+    if (industry && industry !== existingCompany[0]?.industry) {
       fieldsToUpdate.push("industry = ?");
       valuesToUpdate.push(industry);
     }
 
-    if (email !== undefined) {
+    if (email && email !== existingCompany[0]?.email) {
       fieldsToUpdate.push("email = ?");
       valuesToUpdate.push(email);
     }
 
-    if (head_quarters !== undefined) {
+    if (head_quarters && head_quarters !== existingCompany[0]?.head_quarters) {
       fieldsToUpdate.push("head_quarters = ?");
       valuesToUpdate.push(head_quarters);
     }
@@ -86,15 +98,10 @@ const updateCompany = async (req, res) => {
     if (fieldsToUpdate.length === 0) {
       return res
         .status(400)
-        .send({ message: "No valid fields provided to update." });
-    }
-
-    const [existingUser] = await db
-      .promise()
-      .query(`SELECT * FROM \`${dbName}\`.companies WHERE email = ?`, [email]);
-
-    if (existingUser.length > 0) {
-      return res.status(400).send({ message: "Email is already in use." });
+        .send({
+          message:
+            "No valid fields provided to update, or  no changes detected",
+        });
     }
 
     valuesToUpdate.push(companyId);
