@@ -4,18 +4,18 @@ const workRelationshipsController = require("../controllers/work_relationships")
 const routerWorkRelationships = express.Router();
 
 routerWorkRelationships.post(
-  "/pending/:id",
+  "/pending/:userId",
   workRelationshipsController.pendingRelationship
 );
 
-// routerWorkRelationships.delete(
-//   "/left",
-//   workRelationshipsController.leftRelationship
-// );
+routerWorkRelationships.patch(
+  "/active/:companyId",
+  workRelationshipsController.activeRelationship
+);
 
-// routerWorkRelationships.post(
-//   "/active/:id",
-//   workRelationshipsController.activeRelationship
-// );
+routerWorkRelationships.delete(
+  "/left/:userId/:companyId",
+  workRelationshipsController.leftRelationship
+);
 
 module.exports = routerWorkRelationships;
