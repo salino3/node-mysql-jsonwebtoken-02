@@ -13,9 +13,9 @@ routerWorkRelationships.patch(
   workRelationshipsController.activeRelationship
 );
 
-// routerWorkRelationships.delete(
-//   "/left",
-//   workRelationshipsController.leftRelationship
-// );
+routerWorkRelationships.delete(
+  "/left/:userId/:companyId",
+  workRelationshipsController.leftRelationship
+);
 
 module.exports = routerWorkRelationships;

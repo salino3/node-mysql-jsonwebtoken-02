@@ -49,6 +49,7 @@ const activeRelationship = async (req, res) => {
   const companyId = req.params.companyId;
   const { user_id } = req.body;
   try {
+    // Verify if the user exist and already has a relationship
     const [existingRelationship] = await db.promise().query(
       `SELECT 
          u.id AS user_id,
@@ -88,7 +89,7 @@ const activeRelationship = async (req, res) => {
       [existingRelationship[0].relationship_id]
     );
 
-    return res.status(201).send({
+    return res.status(200).send({
       message: "Relationship activated successfully.",
     });
   } catch (error) {
@@ -96,4 +97,53 @@ const activeRelationship = async (req, res) => {
   }
 };
 
-module.exports = { pendingRelationship, activeRelationship };
+const leftRelationship = async (req, res) => {
+  const dbName = process.env.DB_NAME;
+  const { companyId, userId } = req.params;
+
+  try {
+    // Verify if the relationship exists and status is 'active'
+    const [existingRelationship] = await db.promise().query(
+      `SELECT id, status 
+       FROM \`${dbName}\`.work_relationships 
+       WHERE user_id = ? AND company_id = ?`,
+      [userId, companyId]
+    );
+
+    // Verify if relationship exists
+    if (existingRelationship.length === 0) {
+      return res.status(400).send({
+        message: "No relationship exists between this user and company.",
+      });
+    }
+
+    // Verify if status is 'left'
+    if (existingRelationship[0].status === "left") {
+      return res.status(400).send({
+        message: "Relationship is already deleted.",
+      });
+    }
+
+    // Verify if status is 'active'
+    if (existingRelationship[0].status !== "active") {
+      return res.status(400).send({
+        message: "Relationship is not active, cannot delete.",
+      });
+    }
+
+    await db.promise().query(
+      `UPDATE \`${dbName}\`.work_relationships 
+       SET status = 'left' 
+       WHERE user_id = ? AND company_id = ?`,
+      [userId, companyId]
+    );
+
+    return res.status(200).send({
+      message: "Relationship status updated to 'left'.",
+    });
+  } catch (error) {
+    return res.status(500).send({ message: "Error: " + error });
+  }
+};
+
+module.exports = { pendingRelationship, activeRelationship, leftRelationship };
