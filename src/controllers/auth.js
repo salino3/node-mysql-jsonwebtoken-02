@@ -84,7 +84,6 @@ const loginUser = async (req, res) => {
 
       return res.json({
         message: "Login successful",
-        token,
       });
     })
     .catch((err) => {
@@ -173,7 +172,6 @@ const loginCompany = async (req, res) => {
 
       return res.json({
         message: "Login successful",
-        token,
       });
     })
     .catch((err) => {
