@@ -6,7 +6,7 @@ const verifyJWT = (req, res, next) => {
   if (!endToken) {
     return res
       .status(400)
-      .send({ message: "Four numbers (cookie identifier) is missing." });
+      .send({ message: "Numbers (cookie identifier) is missing." });
   }
 
   const cookieName = `auth_token_${endToken}`;

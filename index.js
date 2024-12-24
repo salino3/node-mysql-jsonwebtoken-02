@@ -28,7 +28,7 @@ app.use(
 app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
 app.use("/companies", routerCompanies);
-app.use("/work_relationships", routerWorkRelationships);
+app.use("/work_relationships", verifyJWT, routerWorkRelationships);
 
 //
 if (process.env.NODE_ENV === "production") {
