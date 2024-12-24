@@ -75,33 +75,30 @@ const updateUser = async (req, res) => {
     const fieldsToUpdate = [];
     const valuesToUpdate = [];
 
-    if (name && name !== existingUser[0].name) {
+    if (name && name !== existingUser[0]?.name) {
       fieldsToUpdate.push("name = ?");
       valuesToUpdate.push(name);
     }
 
-    if (surname && surname !== existingUser[0].surname) {
+    if (surname && surname !== existingUser[0]?.surname) {
       fieldsToUpdate.push("surname = ?");
       valuesToUpdate.push(surname);
     }
 
-    if (email && email !== existingUser[0].email) {
+    if (email && email !== existingUser[0]?.email) {
       fieldsToUpdate.push("email = ?");
       valuesToUpdate.push(email);
     }
 
-    if (age && age !== existingUser[0].age) {
+    if (age && age !== existingUser[0]?.age) {
       fieldsToUpdate.push("age = ?");
       valuesToUpdate.push(age);
     }
 
     if (fieldsToUpdate.length === 0) {
-      return res
-        .status(400)
-        .send({
-          message:
-            "No valid fields provided to update, or  no changes detected",
-        });
+      return res.status(400).send({
+        message: "No valid fields provided to update, or  no changes detected",
+      });
     }
 
     valuesToUpdate.push(userId);
@@ -150,7 +147,7 @@ const changePasswordUser = async (req, res) => {
       return res.status(404).send({ message: "User not found." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user[0].password);
+    const isPasswordValid = await bcrypt.compare(password, user[0]?.password);
     if (!isPasswordValid) {
       return res.status(400).send({ message: "Old password is incorrect." });
     }

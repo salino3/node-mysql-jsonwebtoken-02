@@ -1,13 +1,16 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const routerAuth = require("./src/routes/auth");
 const routerUsers = require("./src/routes/users");
 const routerCompanies = require("./src/routes/companies");
 const routerWorkRelationships = require("./src/routes/work_relationships");
+const { verifyJWT } = require("./src/middleware/verify-token");
 
 dotenv.config();
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 
 const port = process.env.PORT || 5000;
@@ -25,7 +28,7 @@ app.use(
 app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
 app.use("/companies", routerCompanies);
-app.use("/work_relationships", routerWorkRelationships);
+app.use("/work_relationships", verifyJWT, routerWorkRelationships);
 
 //
 if (process.env.NODE_ENV === "production") {

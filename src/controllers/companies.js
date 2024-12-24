@@ -96,12 +96,9 @@ const updateCompany = async (req, res) => {
     }
 
     if (fieldsToUpdate.length === 0) {
-      return res
-        .status(400)
-        .send({
-          message:
-            "No valid fields provided to update, or  no changes detected",
-        });
+      return res.status(400).send({
+        message: "No valid fields provided to update, or  no changes detected",
+      });
     }
 
     valuesToUpdate.push(companyId);
@@ -150,7 +147,10 @@ const changePasswordCompany = async (req, res) => {
       return res.status(404).send({ message: "Company not found." });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, company[0].password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      company[0]?.password
+    );
     if (!isPasswordValid) {
       return res.status(400).send({ message: "Old password is incorrect." });
     }
