@@ -12,8 +12,8 @@ routerUsers.get("/email/:email", usersController?.getUserByEmail);
 
 routerUsers.put("/:id", verifyJWT("id"), usersController?.updateUser);
 
-routerUsers.patch("/:id", verifyJWT, usersController?.changePasswordUser);
+routerUsers.patch("/:id", verifyJWT("id"), usersController?.changePasswordUser);
 
-routerUsers.delete("/:id", verifyJWT, usersController?.deleteUser);
+routerUsers.delete("/:id", verifyJWT("id"), usersController?.deleteUser);
 
 module.exports = routerUsers;
