@@ -56,7 +56,7 @@ const getUserByEmail = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const dbName = process.env.DB_NAME;
-  const userId = req.params.id;
+  const userId = req.id;
   const { name, surname, email, age } = req.body;
 
   try {

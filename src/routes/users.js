@@ -10,7 +10,7 @@ routerUsers.get("/:id", usersController?.getUserById);
 
 routerUsers.get("/email/:email", usersController?.getUserByEmail);
 
-routerUsers.put("/:id", verifyJWT, usersController?.updateUser);
+routerUsers.put("/:id", verifyJWT("id"), usersController?.updateUser);
 
 routerUsers.patch("/:id", verifyJWT, usersController?.changePasswordUser);
 
