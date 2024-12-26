@@ -26,8 +26,10 @@ const verifyJWT = (key = "") => {
           return res.status(401).send({ message: "Unauthorized." });
         }
         req[key] = decoded[key];
+        next();
+      } else {
+        next();
       }
-      next();
     } catch (error) {
       return res.status(403).send({ message: "Forbidden: Invalid token." });
     }
