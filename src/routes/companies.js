@@ -10,14 +10,22 @@ routerCompanies.get("/:id", companiesController?.getCompanyById);
 
 routerCompanies.get("/email/:email", companiesController?.getCompanyByEmail);
 
-routerCompanies.put("/:id", verifyJWT, companiesController?.updateCompany);
+routerCompanies.put(
+  "/:id",
+  verifyJWT("id"),
+  companiesController?.updateCompany
+);
 
 routerCompanies.patch(
   "/:id",
-  verifyJWT,
+  verifyJWT("id"),
   companiesController?.changePasswordCompany
 );
 
-routerCompanies.delete("/:id", verifyJWT, companiesController?.deleteCompany);
+routerCompanies.delete(
+  "/:id",
+  verifyJWT("id"),
+  companiesController?.deleteCompany
+);
 
 module.exports = routerCompanies;
