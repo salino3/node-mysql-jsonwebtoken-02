@@ -16,7 +16,7 @@ routerWorkRelationships.patch(
   workRelationshipsController.activeRelationship
 );
 
-routerWorkRelationships.delete(
+routerWorkRelationships.patch(
   "/left/:userId/:companyId",
   verifyJWT(""),
   workRelationshipsController.leftRelationship
