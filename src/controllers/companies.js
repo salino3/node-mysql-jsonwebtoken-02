@@ -13,7 +13,9 @@ const getCompanies = async (req, res) => {
       return res.status(404).send("No companies found.");
     }
 
-    return res.status(200).send(result[0]);
+    const companies = result[0].map(({ password, ...company }) => company);
+
+    return res.status(200).send(companies);
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);
@@ -31,7 +33,9 @@ const getCompanyById = async (req, res) => {
     if (result[0] === 0) {
       return res.status(404).send("Company not found.");
     }
-    return res.status(200).send(result[0]);
+
+    const { password, ...company } = result[0][0];
+    return res.status(200).send(company);
   } catch (error) {
     return res.status(500).send(error);
   }
@@ -48,7 +52,10 @@ const getCompanyByEmail = async (req, res) => {
     if (result[0] === 0) {
       return res.status(404).send("Company not found.");
     }
-    return res.status(200).send(result[0]);
+
+    const { password, ...company } = result[0][0];
+
+    return res.status(200).send(company);
   } catch (error) {
     return res.status(500).send(error);
   }
