@@ -6,7 +6,6 @@ const routerAuth = require("./src/routes/auth");
 const routerUsers = require("./src/routes/users");
 const routerCompanies = require("./src/routes/companies");
 const routerWorkRelationships = require("./src/routes/work_relationships");
-const { verifyJWT } = require("./src/middleware/verify-token");
 
 dotenv.config();
 const app = express();
