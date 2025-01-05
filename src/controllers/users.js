@@ -9,7 +9,7 @@ const getUsers = async (req, res) => {
       .promise()
       .query(`SELECT * FROM \`${dbName}\`.users`);
 
-    if (result[0] === 0) {
+    if (result[0]?.length === 0) {
       return res.status(404).send("No users found.");
     }
 
@@ -29,7 +29,7 @@ const getUserById = async (req, res) => {
       .promise()
       .query(`SELECT * FROM \`${dbName}\`.users WHERE id = (?)`, id);
 
-    if (result[0] === 0) {
+    if (result[0]?.length === 0) {
       return res.status(404).send("User not found.");
     }
     const { password, ...user } = result[0][0];
@@ -48,7 +48,7 @@ const getUserByEmail = async (req, res) => {
       .promise()
       .query(`SELECT * FROM \`${dbName}\`.users WHERE email = (?)`, email);
 
-    if (result[0] === 0) {
+    if (result[0]?.length === 0) {
       return res.status(404).send("User not found.");
     }
 

@@ -9,7 +9,7 @@ const getCompanies = async (req, res) => {
       .promise()
       .query(`SELECT * FROM \`${dbName}\`.companies`);
 
-    if (result[0] === 0) {
+    if (result[0]?.length === 0) {
       return res.status(404).send("No companies found.");
     }
 
@@ -30,7 +30,7 @@ const getCompanyById = async (req, res) => {
       .promise()
       .query(`SELECT * FROM \`${dbName}\`.companies WHERE id = (?)`, id);
 
-    if (result[0] === 0) {
+    if (result[0]?.length === 0) {
       return res.status(404).send("Company not found.");
     }
 
@@ -49,7 +49,7 @@ const getCompanyByEmail = async (req, res) => {
       .promise()
       .query(`SELECT * FROM \`${dbName}\`.companies WHERE email = (?)`, email);
 
-    if (result[0] === 0) {
+    if (result[0]?.length === 0) {
       return res.status(404).send("Company not found.");
     }
 
