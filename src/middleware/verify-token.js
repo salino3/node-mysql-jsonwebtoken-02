@@ -21,7 +21,6 @@ const verifyJWT = (key = "") => {
       const decoded = jwt.verify(cookieValue, process.env.SECRET_KEY);
       if (key) {
         // Verification IDs
-        console.log("Decoded", key, decoded, req.params[key]);
 
         const paramsId = req.params[key];
         if (decoded.id != paramsId) {
