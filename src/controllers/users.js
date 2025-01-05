@@ -31,7 +31,9 @@ const getUserById = async (req, res) => {
     if (result[0] === 0) {
       return res.status(404).send("User not found.");
     }
-    return res.status(200).send(result[0]);
+    const { password, ...userWithoutPassword } = result[0][0];
+
+    return res.status(200).send(userWithoutPassword);
   } catch (error) {
     return res.status(500).send(error);
   }
