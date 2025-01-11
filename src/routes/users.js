@@ -6,6 +6,8 @@ const routerUsers = express.Router();
 
 routerUsers.get("/", usersController?.getUsers);
 
+routerUsers.get("/batch/get", usersController?.getBatchUsers);
+
 routerUsers.get("/:id", usersController?.getUserById);
 
 routerUsers.get("/email/:email", usersController?.getUserByEmail);

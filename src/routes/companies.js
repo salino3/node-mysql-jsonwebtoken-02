@@ -6,6 +6,8 @@ const routerCompanies = express.Router();
 
 routerCompanies.get("/", companiesController?.getCompanies);
 
+routerCompanies.get("/batch/get", companiesController?.getBatchCompanies);
+
 routerCompanies.get("/:id", companiesController?.getCompanyById);
 
 routerCompanies.get("/email/:email", companiesController?.getCompanyByEmail);

@@ -22,6 +22,42 @@ const getCompanies = async (req, res) => {
   }
 };
 
+const getBatchCompanies = async (req, res) => {
+  const dbName = process.env.DB_NAME;
+  const { limit = 5, offset = 0 } = req.query;
+
+  try {
+    const parsedLimit = parseInt(limit, 10);
+    const parsedOffset = parseInt(offset, 10);
+
+    if (
+      isNaN(parsedLimit) ||
+      isNaN(parsedOffset) ||
+      parsedLimit <= 0 ||
+      parsedOffset < 0
+    ) {
+      return res.status(400).send("Invalid limit or offset.");
+    }
+
+    // 'offset 10' starts returning index 10, it is eleventh user in the list
+    const query = `
+        SELECT * FROM \`${dbName}\`.companies
+        LIMIT ? OFFSET ?`;
+    const result = await db.promise().query(query, [parsedLimit, parsedOffset]);
+
+    if (result[0]?.length === 0) {
+      return res.status(404).send("No companies found.");
+    }
+
+    const companies = result[0].map(({ password, ...company }) => company);
+
+    return res.status(200).send(companies);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+};
+
 const getCompanyById = async (req, res) => {
   const dbName = process.env.DB_NAME;
   const { id } = req.params;
@@ -203,6 +239,7 @@ const deleteCompany = async (req, res) => {
 
 module.exports = {
   getCompanies,
+  getBatchCompanies,
   getCompanyById,
   getCompanyByEmail,
   updateCompany,
