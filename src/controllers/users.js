@@ -21,6 +21,41 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getBatchUsers = async (req, res) => {
+  const dbName = process.env.DB_NAME;
+  const { limit = 5, offset = 0 } = req.query;
+
+  try {
+    const parsedLimit = parseInt(limit, 10);
+    const parsedOffset = parseInt(offset, 10);
+
+    if (
+      isNaN(parsedLimit) ||
+      isNaN(parsedOffset) ||
+      parsedLimit <= 0 ||
+      parsedOffset < 0
+    ) {
+      return res.status(400).send("Invalid limit or offset values.");
+    }
+
+    // 'offset 10' starts returning index 10, it is eleventh user in the list
+    const query = `
+      SELECT * FROM \`${dbName}\`.users
+      LIMIT ? OFFSET ?`;
+    const result = await db.promise().query(query, [parsedLimit, parsedOffset]);
+
+    if (result[0]?.length === 0) {
+      return res.status(404).send("No users found.");
+    }
+
+    const users = result[0].map(({ password, ...user }) => user);
+    return res.status(200).send(users);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send(error);
+  }
+};
+
 const getUserById = async (req, res) => {
   const dbName = process.env.DB_NAME;
   const { id } = req.params;
@@ -198,6 +233,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   getUsers,
+  getBatchUsers,
   getUserById,
   getUserByEmail,
   updateUser,
